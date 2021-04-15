@@ -1,0 +1,16 @@
+[package]
+name = "aco-sync-nas-dirs"
+version = "0.1.0"
+authors = ["Taylor Denouden <taylordenouden@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+dotenv = "0.15.0"
+dotenv_codegen = "0.15.0"
+fs_extra = "1.2.0"
+log = { version = "0.4", features = ["max_level_debug", "release_max_level_info"] }
+postgres = "0.19.1"
+simple_logger = "1.11.0"
+structopt = "0.3.21"
