@@ -12,3 +12,7 @@ Cargo.lock
 
 # Database connection config
 .env
+
+# Testing directories
+/seed/
+/root/

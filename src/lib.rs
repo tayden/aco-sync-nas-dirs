@@ -26,7 +26,6 @@ pub struct Cli {
 }
 
 pub fn get_db_projects(root_dir: &PathBuf, year: &i32) -> Result<HashSet<PathBuf>, postgres::error::Error> {
-    // TODO: Get connection params from env variables/.env file
     let connection = format!("host={DB_HOST} port={DB_PORT} dbname={DB_NAME} user={DB_USER} password={DB_PASS}",
                              DB_HOST = dotenv!("DB_HOST"),
                              DB_PORT = dotenv!("DB_PORT"),
