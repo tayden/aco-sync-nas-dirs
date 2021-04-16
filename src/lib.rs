@@ -14,17 +14,17 @@ use structopt::StructOpt;
 #[derive(StructOpt, Debug)]
 /// Create ACO directory seeds on the NAS using the AIMS database projects
 pub struct Cli {
-    /// The year of files to sync
+    /// The year in the AIMS to search for projects
     pub year: i32,
 
     /// The minimum project status to seed
     pub min_status: String,
 
-    /// The root directory where project directories are stored
+    /// The root directory where project directories are located
     #[structopt(parse(from_os_str = Self::parse_canonical_path))]
     pub root_dir: PathBuf,
 
-    /// The seed directory used to create a new directory under root_dir
+    /// The seed directory to copy to produce a new empty project directory under the root_dir
     #[structopt(parse(from_os_str = Self::parse_canonical_path))]
     pub seed_dir: PathBuf,
 }
