@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Run" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
-    <option name="command" value="run --package aco-sync-nas-dirs --bin aco-sync-nas-dirs 2021 root seed" />
+    <option name="command" value="run --package aco-sync-nas-dirs --bin aco-sync-nas-dirs 2021 approved root seed" />
     <option name="workingDirectory" value="file://$PROJECT_DIR$" />
     <option name="channel" value="DEFAULT" />
     <option name="requiredFeatures" value="true" />

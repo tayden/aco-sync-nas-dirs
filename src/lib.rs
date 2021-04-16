@@ -7,6 +7,7 @@ use std::path::PathBuf;
 use std::{ffi, fs, io};
 
 use log::{debug, error};
+use postgres::types::Type;
 use postgres::{Client, NoTls};
 use structopt::StructOpt;
 
@@ -15,6 +16,9 @@ use structopt::StructOpt;
 pub struct Cli {
     /// The year of files to sync
     pub year: i32,
+
+    /// The minimum project status to seed
+    pub min_status: String,
 
     /// The root directory where project directories are stored
     #[structopt(parse(from_os_str = Self::parse_canonical_path))]
@@ -55,17 +59,17 @@ fn get_db_client() -> Client {
 pub fn get_db_projects(
     root_dir: &PathBuf,
     year: &i32,
+    min_status: &String,
 ) -> Result<HashSet<PathBuf>, postgres::Error> {
     let mut client = get_db_client();
 
+    let stmt = client.prepare_typed(
+        "SELECT dirname FROM aco.output_project_phases WHERE project_year = $1 AND status_project >= $2::aco.enum_status_phase",
+        &[Type::INT4, Type::TEXT],
+    )?;
+
     let paths: Vec<PathBuf> = client
-        .query(
-            "SELECT \
-            replace(projectphase_num, '-', '_') || '_' || \
-            regexp_replace(project_name, '\\W+', '_', 'g') \
-            FROM aco.output_project_phases WHERE project_year = $1",
-            &[&year],
-        )?
+        .query(&stmt, &[&year, &min_status])?
         .into_iter()
         .map(|row| row.get(0))
         .map(|r: String| root_dir.join(r))

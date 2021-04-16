@@ -18,7 +18,7 @@ fn main() {
     debug!("Args: {:?}", args);
 
     // Get project paths that should exist, using ACO database
-    let db_projects = get_db_projects(&args.root_dir, &args.year)
+    let db_projects = get_db_projects(&args.root_dir, &args.year, &args.min_status)
         .expect("Error fetching projects from database.");
     debug!("DB Projects: {:?}", &db_projects);
 
