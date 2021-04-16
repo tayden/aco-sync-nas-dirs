@@ -1,6 +1,6 @@
 [package]
 name = "aims-seed-aco-nas"
-version = "0.2.2"
+version = "0.2.0"
 authors = ["Taylor Denouden <taylordenouden@gmail.com>"]
 edition = "2018"
 
@@ -8,7 +8,6 @@ edition = "2018"
 
 [dependencies]
 dotenv = "0.15.0"
-dotenv_codegen = "0.15.0"
 fs_extra = "1.2.0"
 log = { version = "0.4", features = ["max_level_debug", "release_max_level_info"] }
 postgres = "0.19.1"

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/aco-sync-nas-dirs.iml" filepath="$PROJECT_DIR$/.idea/aco-sync-nas-dirs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/aims-seed-aco-nas.iml" filepath="$PROJECT_DIR$/.idea/aims-seed-aco-nas.iml" />
     </modules>
   </component>
 </project>

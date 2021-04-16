@@ -1,10 +1,7 @@
-#[macro_use]
-extern crate dotenv_codegen;
-
 use std::collections::HashSet;
 use std::iter::FromIterator;
 use std::path::PathBuf;
-use std::{ffi, fs, io};
+use std::{env, ffi, fs, io};
 
 use log::{debug, error};
 use postgres::types::Type;
@@ -42,14 +39,27 @@ impl Cli {
     }
 }
 
+fn dotenv(name: &str) -> String {
+    match env::var(&name) {
+        Ok(v) => v,
+        Err(e) => {
+            error!(
+                "Required environment variable {} was not defined: {}",
+                &name, &e
+            );
+            panic!("{}", e);
+        }
+    }
+}
+
 fn get_db_client() -> Result<Client, postgres::Error> {
     let connection = format!(
         "host={} port={} dbname={} user={} password={}",
-        dotenv!("DB_HOST"),
-        dotenv!("DB_PORT"),
-        dotenv!("DB_NAME"),
-        dotenv!("DB_USER"),
-        dotenv!("DB_PASS")
+        dotenv("DB_HOST"),
+        dotenv("DB_PORT"),
+        dotenv("DB_NAME"),
+        dotenv("DB_USER"),
+        dotenv("DB_PASS")
     );
     debug!("Postgres connection: {}", &connection);
 
