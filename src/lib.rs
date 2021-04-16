@@ -42,7 +42,7 @@ impl Cli {
     }
 }
 
-fn get_db_client() -> Client {
+fn get_db_client() -> Result<Client, postgres::Error> {
     let connection = format!(
         "host={} port={} dbname={} user={} password={}",
         dotenv!("DB_HOST"),
@@ -53,13 +53,7 @@ fn get_db_client() -> Client {
     );
     debug!("Postgres connection: {}", &connection);
 
-    match Client::connect(&connection, NoTls) {
-        Ok(client) => client,
-        Err(e) => {
-            error!("Could not connect to DB: {}", e);
-            panic!("{}", e);
-        }
-    }
+    Client::connect(&connection, NoTls)
 }
 
 pub fn get_db_projects(
@@ -67,7 +61,7 @@ pub fn get_db_projects(
     year: &i32,
     min_status: &String,
 ) -> Result<HashSet<PathBuf>, postgres::Error> {
-    let mut client = get_db_client();
+    let mut client = get_db_client()?;
 
     let stmt = client.prepare_typed(
         "SELECT dirname \
