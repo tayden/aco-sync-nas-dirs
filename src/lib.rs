@@ -64,7 +64,10 @@ pub fn get_db_projects(
     let mut client = get_db_client();
 
     let stmt = client.prepare_typed(
-        "SELECT dirname FROM aco.output_project_phases WHERE project_year = $1 AND status_project >= $2::aco.enum_status_phase",
+        "SELECT dirname \
+        FROM aco.output_project_phases \
+        WHERE project_year = $1 \
+        AND status_project >= $2::aco.enum_status_phase",
         &[Type::INT4, Type::TEXT],
     )?;
 
