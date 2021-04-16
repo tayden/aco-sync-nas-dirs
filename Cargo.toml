@@ -1,6 +1,6 @@
 [package]
-name = "aco-sync-nas-dirs"
-version = "0.1.0"
+name = "aims-seed-aco-nas"
+version = "0.2.2"
 authors = ["Taylor Denouden <taylordenouden@gmail.com>"]
 edition = "2018"
 

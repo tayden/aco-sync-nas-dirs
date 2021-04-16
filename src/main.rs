@@ -4,7 +4,7 @@ use log::{debug, error, info};
 use simple_logger::SimpleLogger;
 use structopt::StructOpt;
 
-use aco_sync_nas_dirs::*;
+use aims_seed_aco_nas::*;
 
 fn main() {
     // Get .env values
