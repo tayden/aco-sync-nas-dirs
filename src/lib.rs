@@ -32,7 +32,13 @@ pub struct Cli {
 impl Cli {
     fn parse_canonical_path(path: &ffi::OsStr) -> PathBuf {
         let buf = PathBuf::from(path);
-        fs::canonicalize(buf).unwrap()
+        match fs::canonicalize(&buf) {
+            Ok(path) => path,
+            Err(e) => {
+                error!("Could not parse system path {:?}: {}", &buf, &e);
+                panic!("{}", e)
+            }
+        }
     }
 }
 
@@ -50,8 +56,8 @@ fn get_db_client() -> Client {
     match Client::connect(&connection, NoTls) {
         Ok(client) => client,
         Err(e) => {
-            error!("{:?}", e);
-            std::process::exit(1);
+            error!("Could not connect to DB: {}", e);
+            panic!("{}", e);
         }
     }
 }
