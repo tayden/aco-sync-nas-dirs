@@ -1,5 +1,3 @@
-use std::fs;
-
 use dotenv::dotenv;
 use fs_extra::dir;
 use log::{debug, info};
@@ -15,17 +13,18 @@ fn main() {
     // Initialize a logger
     SimpleLogger::new().init().unwrap();
 
-    let mut args = Cli::from_args();
-    args.root_dir = fs::canonicalize(args.root_dir).unwrap();
-    args.seed_dir = fs::canonicalize(args.seed_dir).unwrap();
+    // Parse CLI args
+    let args = Cli::from_args();
     debug!("Args: {:?}", args);
 
     // Get project paths that should exist, using ACO database
-    let db_projects = get_db_projects(&args.root_dir, &args.year).expect("Error fetching projects from database.");
+    let db_projects = get_db_projects(&args.root_dir, &args.year)
+        .expect("Error fetching projects from database.");
     debug!("DB Projects: {:?}", &db_projects);
 
     // Get project paths that actually exist on the NAS
-    let fs_projects = get_fs_projects(&args.root_dir).expect("Could not get filesystem project directories.");
+    let fs_projects =
+        get_fs_projects(&args.root_dir).expect("Could not get filesystem project directories.");
     debug!("FS Projects: {:?}", &fs_projects);
 
     // Get a list of the missing directories on the NAS, based on the above directory sets
@@ -36,7 +35,7 @@ fn main() {
     let mut copy_options = dir::CopyOptions::new();
     copy_options.copy_inside = true;
     for path in missing {
-        info!("Created: {}", path.clone().into_os_string().into_string().unwrap());
+        info!("Created: {:?}", &path);
         dir::copy(&args.seed_dir, path, &copy_options).expect("Could not copy seed directory");
     }
 }
