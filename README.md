@@ -29,22 +29,30 @@ DB_PORT=5432
 Then call the program as follows
 
 ```shell
-aims-seed-aco-nas --help
-#    aims-seed-aco-nas 0.2.0
-#    Create ACO directory seeds on the NAS using the AIMS database projects
-#    
-#    USAGE:
-#        aims-seed-aco-nas <year> <min-status> <root-dir> <seed-dir>
-#    
-#    FLAGS:
-#        -h, --help       Prints help information
-#        -V, --version    Prints version information
-#    
-#    ARGS:
-#        <year>          The year in the AIMS to search for projects
-#        <min-status>    The minimum project status to seed
-#        <root-dir>      The root directory where project directories are located
-#        <seed-dir>      The seed directory to copy to produce a new empty project directory under the root_dir
+#  aims-seed-aco-nas --help
+#  aims-seed-aco-nas 0.2.0
+#  Create ACO directory seeds on the NAS using the AIMS database projects
+#  
+#  USAGE:
+#      aims-seed-aco-nas <year> <min-status> <root-dir> <seed-dir> --db-host <db-host> --db-name <db-name> --db-pass <db-pass> --db-port <db-port> --db-user <db-user>
+#  
+#  FLAGS:
+#          --help       Prints help information
+#      -V, --version    Prints version information
+#  
+#  OPTIONS:
+#      -h, --db-host <db-host>    The AIMS database host [env: DB_HOST=db.hakai.org]
+#      -d, --db-name <db-name>    The AIMS database name [env: DB_NAME=hakai]
+#      -w, --db-pass <db-pass>    Password for the AIMS database USER [env: DB_PASS=secret]
+#      -p, --db-port <db-port>    The AIMS database port [env: DB_PORT=5432]
+#      -U, --db-user <db-user>    The AIMS database user [env: DB_USER=your_username]
+#  
+#  ARGS:
+#      <year>          The year in the AIMS to search for projects
+#      <min-status>    The minimum project status to seed [possible values: proposed, work order done, approved, flight
+#                      plan done, flown, data checked, processed, delivered & complete]
+#      <root-dir>      The root directory where project directories are located
+#      <seed-dir>      The seed directory to copy to produce a new empty project directory under the root_dir
 ```
 
 By default, the program logs to stdout.

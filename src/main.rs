@@ -18,7 +18,7 @@ fn main() {
     debug!("Args: {:?}", args);
 
     // Get project paths that should exist, using ACO database
-    let db_projects = match get_db_projects(&args.root_dir, &args.year, &args.min_status) {
+    let db_projects = match get_db_projects(&args) {
         Ok(paths) => paths,
         Err(e) => {
             error!("Error fetching projects from AIMS: {}", e);

@@ -1,12 +1,23 @@
 use std::collections::HashSet;
 use std::iter::FromIterator;
 use std::path::PathBuf;
-use std::{env, ffi, fs, io};
+use std::{ffi, fs, io};
 
 use log::{debug, error};
 use postgres::types::Type;
 use postgres::{Client, NoTls};
 use structopt::StructOpt;
+
+const PHASE_STATUS: [&str; 8] = [
+    "proposed",
+    "work order done",
+    "approved",
+    "flight plan done",
+    "flown",
+    "data checked",
+    "processed",
+    "delivered & complete",
+];
 
 #[derive(StructOpt, Debug)]
 /// Create ACO directory seeds on the NAS using the AIMS database projects
@@ -15,6 +26,7 @@ pub struct Cli {
     pub year: i32,
 
     /// The minimum project status to seed
+    #[structopt(possible_values = & PHASE_STATUS, case_insensitive = true)]
     pub min_status: String,
 
     /// The root directory where project directories are located
@@ -24,6 +36,26 @@ pub struct Cli {
     /// The seed directory to copy to produce a new empty project directory under the root_dir
     #[structopt(parse(from_os_str = Self::parse_canonical_path))]
     pub seed_dir: PathBuf,
+
+    /// The AIMS database host
+    #[structopt(short = "h", long, env = "DB_HOST")]
+    pub db_host: String,
+
+    /// The AIMS database port
+    #[structopt(short = "p", long, env = "DB_PORT")]
+    pub db_port: String,
+
+    /// The AIMS database name
+    #[structopt(short = "d", long, env = "DB_NAME")]
+    pub db_name: String,
+
+    /// The AIMS database user
+    #[structopt(short = "U", long, env = "DB_USER")]
+    pub db_user: String,
+
+    /// Password for the AIMS database USER
+    #[structopt(short = "w", long, env = "DB_PASS")]
+    pub db_pass: String,
 }
 
 impl Cli {
@@ -39,39 +71,18 @@ impl Cli {
     }
 }
 
-fn dotenv(name: &str) -> String {
-    match env::var(&name) {
-        Ok(v) => v,
-        Err(e) => {
-            error!(
-                "Required environment variable {} was not defined: {}",
-                &name, &e
-            );
-            panic!("{}", e);
-        }
-    }
-}
-
-fn get_db_client() -> Result<Client, postgres::Error> {
+fn get_db_client(args: &Cli) -> Result<Client, postgres::Error> {
     let connection = format!(
         "host={} port={} dbname={} user={} password={}",
-        dotenv("DB_HOST"),
-        dotenv("DB_PORT"),
-        dotenv("DB_NAME"),
-        dotenv("DB_USER"),
-        dotenv("DB_PASS")
+        &args.db_host, &args.db_port, &args.db_name, &args.db_user, &args.db_pass
     );
     debug!("Postgres connection: {}", &connection);
 
     Client::connect(&connection, NoTls)
 }
 
-pub fn get_db_projects(
-    root_dir: &PathBuf,
-    year: &i32,
-    min_status: &String,
-) -> Result<HashSet<PathBuf>, postgres::Error> {
-    let mut client = get_db_client()?;
+pub fn get_db_projects(args: &Cli) -> Result<HashSet<PathBuf>, postgres::Error> {
+    let mut client = get_db_client(&args)?;
 
     let stmt = client.prepare_typed(
         "
@@ -84,10 +95,10 @@ pub fn get_db_projects(
     )?;
 
     let paths: Vec<PathBuf> = client
-        .query(&stmt, &[&year, &min_status])?
+        .query(&stmt, &[&args.year, &args.min_status])?
         .into_iter()
         .map(|row| row.get(0))
-        .map(|r: String| root_dir.join(r))
+        .map(|r: String| args.root_dir.join(r))
         .collect();
 
     Ok(HashSet::<PathBuf>::from_iter(paths))
