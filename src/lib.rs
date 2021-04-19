@@ -54,7 +54,7 @@ pub struct Cli {
     pub db_user: String,
 
     /// Password for the AIMS database USER
-    #[structopt(short = "w", long, env = "DB_PASS")]
+    #[structopt(short = "w", long, env = "DB_PASS", hide_env_values = true)]
     pub db_pass: String,
 }
 
