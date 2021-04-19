@@ -29,7 +29,8 @@ DB_PORT=5432
 Then call the program as follows
 
 ```shell
-#  aims-seed-aco-nas --help
+./aims-seed-aco-nas --help
+
 #  aims-seed-aco-nas 0.2.0
 #  Create ACO directory seeds on the NAS using the AIMS database projects
 #  
@@ -43,7 +44,7 @@ Then call the program as follows
 #  OPTIONS:
 #      -h, --db-host <db-host>    The AIMS database host [env: DB_HOST=db.hakai.org]
 #      -d, --db-name <db-name>    The AIMS database name [env: DB_NAME=hakai]
-#      -w, --db-pass <db-pass>    Password for the AIMS database USER [env: DB_PASS=secret]
+#      -w, --db-pass <db-pass>    Password for the AIMS database USER [env: DB_PASS]
 #      -p, --db-port <db-port>    The AIMS database port [env: DB_PORT=5432]
 #      -U, --db-user <db-user>    The AIMS database user [env: DB_USER=your_username]
 #  
