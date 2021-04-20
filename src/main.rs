@@ -45,12 +45,10 @@ fn main() {
     let mut copy_options = dir::CopyOptions::new();
     copy_options.copy_inside = true;
     for path in missing {
-        match dir::copy(&args.seed_dir, &path, &copy_options) {
-            Ok(_) => info!("Created: {:?}", &path),
-            Err(e) => {
-                error!("Could not create directory {:?}: {}", &path, e);
-                panic!("{}", e);
-            }
-        };
+        if let Err(e) = dir::copy(&args.seed_dir, &path, &copy_options) {
+            error!("Could not create directory {:?}: {}", &path, e);
+            panic!("{}", e);
+        }
+        info!("Created: {:?}", &path);
     }
 }
