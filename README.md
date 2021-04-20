@@ -62,5 +62,5 @@ This allows for easily redirecting logs to some file (e.g. when running as a cro
 
 ## Development
 
-The program is written in Rust and compiled for target `x86_64_unknown_linux_musl`. Binaries are statically linked for
-maximum portability.
+The program is written in Rust and releases are compiled for target `x86_64_unknown_linux_musl`. Released binaries are statically linked for
+maximum portability on Linux machines. For other operating systems, follow the source installation instructions in this README.
